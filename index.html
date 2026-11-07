@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get Dahab Spots & Chill</title>
+    <style>
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+            text-align: center; 
+            padding: 40px 20px; 
+            background-color: #f8f9fa; 
+            color: #333;
+        }
+        h2 { color: #0275d8; }
+        .message { font-size: 1.2rem; margin-top: 20px; line-height: 1.5; }
+        .btn { 
+            display: inline-block; 
+            margin-top: 20px; 
+            padding: 10px 20px; 
+            background-color: #0275d8; 
+            color: white; 
+            text-decoration: none; 
+            border-radius: 8px; 
+            font-weight: bold;
+        }
+    </style>
+    <script>
+        window.onload = function() {
+            var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+            
+            // YOUR GOOGLE PLAY STORE LINK
+            var androidLink = "https://play.google.com/store/apps/details?id=com.dahab.guide";
+            
+            // YOUR FUTURE APP STORE LINK (Leave empty for now)
+            var iosLink = ""; 
+
+            var statusDiv = document.getElementById("status");
+
+            // 1. Detect iOS
+            if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+                if (iosLink) {
+                    window.location.href = iosLink;
+                } else {
+                    statusDiv.innerHTML = "Our iOS app is dropping very soon! 🍎<br><br>For now, grab a friend with an Android to explore Dahab spots offline.";
+                }
+            } 
+            // 2. Detect Android
+            else if (/android/i.test(userAgent)) {
+                window.location.href = androidLink;
+            } 
+            // 3. Desktop / Web Fallback
+            else {
+                statusDiv.innerHTML = "You're on a desktop. Scan the QR code with your phone or click below to view on Google Play.<br><br><a href='" + androidLink + "' class='btn'>View on Google Play</a>";
+            }
+        };
+    </script>
+</head>
+<body>
+    <h2>Dahab Spots & Chill</h2>
+    <div id="status" class="message">Redirecting you to the app... 🚀</div>
+</body>
+</html>
