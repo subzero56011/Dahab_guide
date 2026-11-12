@@ -4,16 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Get Dahab Spots & Chill</title>
-    
+
     <!-- 1. INSTANT REDIRECT LOGIC: Runs immediately before anything else loads -->
     <script>
         var userAgent = navigator.userAgent || navigator.vendor || window.opera;
         var androidLink = "https://play.google.com/store/apps/details?id=com.dahab.guide";
-        var iosLink = ""; // Paste App Store link here later
-        
+        var iosLink = "https://apps.apple.com/us/app/dahab-spots-chill/id6832980894";
+
         if (/android/i.test(userAgent)) {
             window.location.replace(androidLink);
-        } else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream && iosLink) {
+        } else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
             window.location.replace(iosLink);
         }
     </script>
@@ -43,13 +43,16 @@
         h2 { margin: 0 0 10px 0; color: #2c3e50; font-size: 1.5rem; }
         .message { font-size: 1rem; color: #555; line-height: 1.5; margin-bottom: 20px; }
         .btn { 
-            display: inline-block; padding: 12px 25px; background-color: #009688; 
-            color: white; text-decoration: none; border-radius: 25px; font-weight: bold;
+            display: block; padding: 12px 25px; margin-bottom: 12px;
+            background-color: #009688; color: white; text-decoration: none; 
+            border-radius: 25px; font-weight: bold; transition: opacity 0.2s;
         }
+        .btn:hover { opacity: 0.9; }
+        .btn-ios { background-color: #000000; }
     </style>
 </head>
 <body>
-    <!-- 3. FALLBACK UI: Only shown to iOS (for now) or Desktop users -->
+    <!-- 3. FALLBACK UI: Shown to Desktop users, or mobile users with redirects blocked -->
     <div class="overlay"></div>
     <div class="content-box">
         <img src="Gemini_Generated_Image_mfatsjmfatsjmfat.jpg" alt="Dahab Spots Logo" class="logo">
@@ -61,11 +64,13 @@
     <script>
         var statusDiv = document.getElementById("status");
         var uaCheck = navigator.userAgent || navigator.vendor || window.opera;
-        
-        if (/iPad|iPhone|iPod/.test(uaCheck) && !window.MSStream && !iosLink) {
-            statusDiv.innerHTML = "Our iOS app is dropping very soon! 🍎<br><br>For now, grab a friend with an Android to explore Dahab spots offline.";
+
+        if (/iPad|iPhone|iPod/.test(uaCheck) && !window.MSStream) {
+            statusDiv.innerHTML = "Click below to get the iOS app.<br><br><a href='" + iosLink + "' class='btn btn-ios'>Download on the App Store</a>";
+        } else if (/android/i.test(uaCheck)) {
+            statusDiv.innerHTML = "Click below to get the Android app.<br><br><a href='" + androidLink + "' class='btn'>Get it on Google Play</a>";
         } else {
-            statusDiv.innerHTML = "You're on a desktop. Scan the sticker QR code with your phone, or click below.<br><br><a href='" + androidLink + "' class='btn'>View on Google Play</a>";
+            statusDiv.innerHTML = "You're on a desktop. Scan the sticker QR code with your phone, or click below.<br><br><a href='" + iosLink + "' class='btn btn-ios'>App Store (iOS)</a><a href='" + androidLink + "' class='btn'>Google Play (Android)</a>";
         }
     </script>
 </body>
