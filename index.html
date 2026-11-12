@@ -40,6 +40,11 @@
             width: 90px; height: 90px; border-radius: 18px; margin-bottom: 15px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
+        /* ADDED: QR code styling */
+        .qr-image {
+            width: 140px; height: 140px; margin: 15px auto; border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15); display: block;
+        }
         h2 { margin: 0 0 10px 0; color: #2c3e50; font-size: 1.5rem; }
         .message { font-size: 1rem; color: #555; line-height: 1.5; margin-bottom: 20px; }
         .btn { 
@@ -70,7 +75,8 @@
         } else if (/android/i.test(uaCheck)) {
             statusDiv.innerHTML = "Click below to get the Android app.<br><br><a href='" + androidLink + "' class='btn'>Get it on Google Play</a>";
         } else {
-            statusDiv.innerHTML = "You're on a desktop. Scan the sticker QR code with your phone, or click below.<br><br><a href='" + iosLink + "' class='btn btn-ios'>App Store (iOS)</a><a href='" + androidLink + "' class='btn'>Google Play (Android)</a>";
+            /* ADDED: The HTML img tag for the QR code */
+            statusDiv.innerHTML = "You're on a desktop. Scan the QR code below with your phone.<br><img src='qr-code.png' alt='Scan to download' class='qr-image'><br><a href='" + iosLink + "' class='btn btn-ios'>App Store (iOS)</a><a href='" + androidLink + "' class='btn'>Google Play (Android)</a>";
         }
     </script>
 </body>
