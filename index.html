@@ -5,20 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Get Dahab Spots & Chill</title>
 
-    <!-- 1. INSTANT REDIRECT LOGIC: Runs immediately before anything else loads -->
+    <!-- 1. INSTANT REDIRECT + REFERRAL TRACKING LOGIC -->
     <script>
+        var params = new URLSearchParams(window.location.search);
+        var rawRef = params.get("ref") || "direct";
+        var safeRef = encodeURIComponent(rawRef);
+
+        // Google Play tracks utm_source automatically in Play Console
+        var androidLink = "https://play.google.com/store/apps/details?id=com.dahab.guide&referrer=utm_source%3D" + safeRef;
+
+        // Apple App Store requires your Provider Token (pt) for Campaign (ct) tracking to register
+        var appleProviderToken = "129773529"; // <-- بدّل دي برقم الـ pt بتاعك من App Store Connect
+        var iosBase = "https://apps.apple.com/us/app/dahab-spots-chill/id6832980894";
+        var iosLink = (appleProviderToken !== "YOUR_PT_HERE" && appleProviderToken !== "")
+            ? iosBase + "?pt=" + encodeURIComponent(appleProviderToken) + "&ct=" + safeRef + "&mt=8"
+            : iosBase;
+
         var userAgent = navigator.userAgent || navigator.vendor || window.opera;
-        var androidLink = "https://play.google.com/store/apps/details?id=com.dahab.guide";
-        var iosLink = "https://apps.apple.com/us/app/dahab-spots-chill/id6832980894";
+        var isIOS = (/iPad|iPhone|iPod/.test(userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) && !window.MSStream;
 
         if (/android/i.test(userAgent)) {
             window.location.replace(androidLink);
-        } else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+        } else if (isIOS) {
             window.location.replace(iosLink);
         }
     </script>
 
-    <!-- 2. STYLES: Only processed if the user didn't get redirected above -->
+    <!-- 2. STYLES -->
     <style>
         body, html { 
             margin: 0; padding: 0; height: 100%;
@@ -40,7 +53,6 @@
             width: 90px; height: 90px; border-radius: 18px; margin-bottom: 15px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
-        /* ADDED: QR code styling */
         .qr-image {
             width: 140px; height: 140px; margin: 15px auto; border-radius: 10px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.15); display: block;
@@ -57,7 +69,7 @@
     </style>
 </head>
 <body>
-    <!-- 3. FALLBACK UI: Shown to Desktop users, or mobile users with redirects blocked -->
+    <!-- 3. FALLBACK UI -->
     <div class="overlay"></div>
     <div class="content-box">
         <img src="Gemini_Generated_Image_mfatsjmfatsjmfat.jpg" alt="Dahab Spots Logo" class="logo">
@@ -65,17 +77,17 @@
         <div id="status" class="message">Loading...</div>
     </div>
 
-    <!-- 4. FALLBACK LOGIC: Updates the UI text based on the device -->
+    <!-- 4. FALLBACK LOGIC -->
     <script>
         var statusDiv = document.getElementById("status");
         var uaCheck = navigator.userAgent || navigator.vendor || window.opera;
+        var isIOSFallback = (/iPad|iPhone|iPod/.test(uaCheck) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) && !window.MSStream;
 
-        if (/iPad|iPhone|iPod/.test(uaCheck) && !window.MSStream) {
+        if (isIOSFallback) {
             statusDiv.innerHTML = "Click below to get the iOS app.<br><br><a href='" + iosLink + "' class='btn btn-ios'>Download on the App Store</a>";
         } else if (/android/i.test(uaCheck)) {
             statusDiv.innerHTML = "Click below to get the Android app.<br><br><a href='" + androidLink + "' class='btn'>Get it on Google Play</a>";
         } else {
-            /* ADDED: The HTML img tag for the QR code */
             statusDiv.innerHTML = "You're on a desktop. Scan the QR code below with your phone.<br><img src='qr-code.png' alt='Scan to download' class='qr-image'><br><a href='" + iosLink + "' class='btn btn-ios'>App Store (iOS)</a><a href='" + androidLink + "' class='btn'>Google Play (Android)</a>";
         }
     </script>
